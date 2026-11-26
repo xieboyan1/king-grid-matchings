@@ -1,0 +1,6 @@
+name = "king-grid-matchings"
+version = "0.1.0"
+defaultTargets = ["KingGrid"]
+
+[[lean_lib]]
+name = "KingGrid"
