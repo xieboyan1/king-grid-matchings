@@ -1,0 +1,55 @@
+Lean (version 4.19.0, x86_64-w64-windows-gnu, commit 6caaee842e94, Release)
+Rebuilding from source with --trust=0 -DwarningAsError=true.
+
+KingGrid/Diagonal.lean
+'DimerDiagonal.exactly_one_diagonal_tiling' depends on axioms: [propext, Quot.sound]
+
+KingGrid/BoardCuts.lean
+'BoardCuts.parallel_if_two' depends on axioms: [propext, Quot.sound]
+'BoardCuts.same_column_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+KingGrid/BoardCells.lean
+'BoardCells.board_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BoardCells.transpose_tiling' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+KingGrid/StripCounts.lean
+'StripCounts.twoBoards_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripCounts.bothDirections_nodup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripCounts.rectangle_count' depends on axioms: [propext, Quot.sound]
+'StripCounts.square_count' depends on axioms: [propext, Quot.sound]
+
+KingGrid/StripGeometry.lean
+'StripCounts.word_is_matching' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripCounts.matching_has_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripCounts.word_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripCounts.fixed_points_count' depends on axioms: [propext, Quot.sound]
+
+KingGrid/StripProducts.lean
+'StripCounts.realize_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripCounts.realize_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripCounts.horizontal_membership' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripCounts.oriented_nodup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripCounts.oriented_square_count' depends on axioms: [propext, Quot.sound]
+
+KingGrid/StripPlacement.lean
+'StripPlacement.edges_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'StripPlacement.horizontal_count_edges' depends on axioms: [propext, Quot.sound]
+'StripPlacement.left_row_query' depends on axioms: [propext, Quot.sound]
+'StripPlacement.edges_faithful' depends on axioms: [propext, Quot.sound]
+
+KingGrid/BoardEncoding.lean
+'BoardEncoding.matching' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BoardEncoding.edge_from_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BoardEncoding.encode_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BoardEncoding.encode_horizontal' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+KingGrid/BoardRoundtrip.lean
+'BoardEncoding.encode_decode_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+KingGrid/KingEnumeration.lean
+'KingEnumeration.exactly_two_rectangle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KingEnumeration.exactly_two_square' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+KingGrid.lean
+
+PASS: 11 modules, 29 axiom reports.
