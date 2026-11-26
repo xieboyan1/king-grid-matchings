@@ -1,0 +1,213 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[letterpaper,margin=1.02in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{etoolbox}
+
+\providecommand{\paperauthor}{}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\id}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\A}{A}
+\newcommand{\singlerow}[1]{\put(0,#1){\line(1,0){1}}}
+\newcommand{\crossrows}[1]{\put(0,#1){\line(1,1){1}}\put(1,#1){\line(-1,1){1}}}
+\newcommand{\stripfour}[1]{%
+  \setlength{\unitlength}{0.205in}%
+  \begin{picture}(1.32,3.30)(-.16,-.15)
+    \linethickness{.65pt}#1%
+    \multiput(0,0)(0,1){4}{\circle*{.17}}%
+    \multiput(1,0)(0,1){4}{\circle*{.17}}%
+  \end{picture}}
+\hypersetup{pdftitle={Perfect matchings with two axial edges on the king's grid}}
+\setlength{\emergencystretch}{1.2em}
+\raggedbottom
+
+\begin{document}
+\begin{center}
+  {\LARGE\bfseries Perfect matchings with two axial edges\\[2pt]
+    on the king's grid\par}
+  \ifdefempty{\paperauthor}{}{\medskip{\large\paperauthor\par}}
+\end{center}
+
+\begin{abstract}
+On a rectangular king's grid, an axial edge joins two cells sharing a
+side. We prove that the number of perfect matchings with exactly two axial
+edges on a \(2m\times2n\) board is \(mn(m+n+2)/2\). On the square this
+gives \(n^2(n+1)\), as conjectured by Ry{\l}ko. A row and column parity
+argument forces the two edges to be parallel. The free boundary then
+splits the board into independent strips, exactly one of which contains
+both edges. A Lean~4 formalization verifies that the strip construction
+enumerates each matching exactly once.
+\end{abstract}
+
+\section{The two-edge coefficient}
+
+In the king's graph on a rectangular board, two distinct cells are
+adjacent when their row and column coordinates each differ by at most
+one. All edges lie within the board. A perfect matching pairs every cell
+once, and two diagonal edges may cross. Call horizontal and vertical edges
+\emph{axial}. Let \(\A_j(m,n)\) count the perfect matchings of a board
+with \(2m\) rows and \(2n\) columns containing exactly \(j\) axial edges.
+
+\begin{theorem}\label{thm:main}
+For all nonnegative integers \(m,n\),
+\[
+  \A_2(m,n)
+   =n\binom{m+1}{2}+m\binom{n+1}{2}
+   =\frac{mn(m+n+2)}{2}.
+\]
+The first summand counts matchings with two horizontal edges and the
+second counts those with two vertical edges.
+\end{theorem}
+
+Ry{\l}ko's array \(T(n,k)\) counts matchings of the \(2n\times2n\)
+square with \(2k\) diagonal edges. He recorded the last two entries of each
+row as conjectures, supported by computations through \(n=10\)
+\cite{rylko}. Since a matching on the square has \(2n^2\) edges, the
+penultimate entry is \(T(n,n^2-1)=\A_2(n,n)\) for \(n\geq1\).
+Theorem~\ref{thm:main} gives the conjectured value \(n^2(n+1)\).
+
+\section{From a rectangle to one strip}
+
+\begin{lemma}\label{lem:parity}
+The horizontal edges of a perfect matching occur equally often in odd
+and even rows. The vertical edges occur equally often in odd and even
+columns.
+\end{lemma}
+
+\begin{proof}
+Each nonhorizontal edge covers one cell in an odd row and one in an even
+row. The two classes have the same size, so the horizontal edges cover
+equally many cells in each class. Each such edge covers two cells in a
+single row. Transposing the board proves the assertion for columns.
+\end{proof}
+
+\newpage
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+An empty board has no two-edge configuration, so assume \(m,n\geq1\).
+By Lemma~\ref{lem:parity} both axial edges are horizontal or both are
+vertical. Suppose they are horizontal. Every cell in the first column must
+take a partner in the second. These \(2m\) distinct partners exhaust
+that column. Removing both columns and repeating partitions the matching
+into \(n\) independent strips of width two.
+
+In each strip consider the two top cells. If they are matched to one
+another, delete that single row (write \(S\)). Otherwise each has only one
+remaining neighbor, the diagonally opposite cell in the next row.
+The two forced edges form a cross. Delete those two rows (write \(X\)).
+Iterating gives a word in \(S,X\) of total height \(2m\), where \(S\)
+has height one and \(X\) has height two. Conversely any such word
+fills the strip from the top down. Each \(S\) contributes one horizontal
+edge and each \(X\) contributes none.
+
+Every strip has even height, so its number of letters \(S\) is even.
+Exactly one strip therefore contains both occurrences of \(S\).
+The other strips each have the unique word \(X^m\). In the exceptional
+strip the two identical letters \(S\) and the \(m-1\) identical letters
+\(X\) occupy \(m+1\) positions, giving \(\binom{m+1}{2}\) words.
+Choosing the strip contributes the factor \(n\). Transposing gives
+\(m\binom{n+1}{2}\) matchings in the vertical case. These two classes are
+disjoint, and their sum is the claimed count.
+\end{proof}
+
+\begin{center}
+  \begin{tabular}{ccc}
+   \stripfour{\singlerow{3}\singlerow{2}\crossrows{0}} &
+   \stripfour{\singlerow{3}\crossrows{1}\singlerow{0}} &
+   \stripfour{\crossrows{2}\singlerow{1}\singlerow{0}}\\[2pt]
+   \(SSX\) & \(SXS\) & \(XSS\)
+  \end{tabular}\\[4pt]
+  \small The three exceptional strips of height four, read from the top.
+\end{center}
+
+For example, on a \(4\times6\) board the count is \(3\cdot3+2\cdot6=21\).
+The single-strip enumeration also has a classical permutation description.
+If \(\pi(i)\) is the right-column partner row of the left cell in row
+\(i\), then \(|\pi(i)-i|\leq1\). The letters \(S\) and \(X\) are the fixed
+points and adjacent transpositions of a Fibonacci permutation.
+Diaconis, Graham and Holmes count permutations of this kind on
+\(N\) letters with \(k\) transpositions by \(\binom{N-k}{k}\)
+\cite[\S2.4, Propositions 2.1 and 2.4]{dgh}.
+Taking \(N=2m\) and \(k=m-1\) recovers the exceptional-strip factor.
+The parity and boundary arguments determine how that factor enters the
+count for the whole board.
+
+The same strip description gives \(\A_0(m,n)=1\), the other end entry of
+Ry{\l}ko's array on the square. This uniqueness also follows from earlier
+tiling work. Diagonal edges preserve checkerboard color. On either color,
+rotating and rescaling the centers turns corner adjacency into ordinary
+side adjacency on a mixed Aztec rectangle. The checkerboard construction
+on the square is given by Ciucu \cite[\S3]{ciucu}. For the rectangle,
+start with the white cells of a \((2m+1)\times(2n+1)\) board with black
+corners and remove the white cells on two adjacent boundary sides. This
+leaves the white cells of the even rectangle and gives Lee's mixed Aztec
+rectangle, up to a rigid motion. Lee records its unique domino tiling
+\cite[\S6, Figure~14]{lee}. Reflection exchanges the two colors, giving
+one matching on each color and thus one on the board.
+
+\newpage
+\section{Formal verification}
+
+The accompanying Lean~4 project defines a legal matching by a list of
+king edges whose endpoints cover each board cell exactly once. It then
+associates to that list its undirected edge relation \(R\). Reordering
+the list or reversing any of its edges leaves \(R\) unchanged. The
+predicate \id{IsTwoTiling} additionally requires the sum of the horizontal
+and vertical edge counts to be two.
+
+In the namespace \id{KingEnumeration}, the theorem
+\id{exactly_two_rectangle} produces a list \(L\) of relations with no
+duplicates, proves that \(R\in L\) exactly when \(R\) is such a tiling,
+and proves the natural-number identity
+\[
+  2\,\mathrm{length}(L)=n\,m(m+1)+m\,n(n+1).
+\]
+The proof builds edges from strip words, recovers the strip encoding of
+any legal matching in the horizontal case, and shows that decoding
+recovers the original undirected edge relation. Transposition supplies
+the other orientation. The corollary \id{exactly_two_square} gives the
+length directly as \(n^2(n+1)\).
+
+The project uses Lean 4.19.0 and its bundled libraries. From the project
+root, \id{lake build} builds the library and \id{python scripts/verify.py}
+rebuilds the sources in a fresh directory and reports the axioms used by
+the named theorems. The rectangular theorem uses only the standard Lean
+axioms \id{propext}, \id{Classical.choice} and \id{Quot.sound}. An
+independent finite check, \id{python scripts/check_small_boards.py}, pairs
+the first uncovered cell with each possible free neighbor and checks all
+25 rectangles with \(0\leq m,n\leq4\). The accompanying source archive
+includes the Lean project and both verification scripts under
+\id{anc/king-grid/}.
+
+\paragraph{Use of generative AI.}
+OpenAI Codex was used to search for related work, develop the counting
+argument, implement the Lean proofs and reproduction scripts, and draft
+the manuscript.
+
+\begin{thebibliography}{9}
+\bibitem{ciucu}
+M. Ciucu, \href{https://doi.org/10.1007/s10801-007-0099-7}{Symmetry
+classes of spanning trees of Aztec diamonds and perfect matchings of odd
+squares with a unit hole}, \emph{J. Algebraic Combin.} \textbf{27}
+(2008), 493--538.
+
+\bibitem{dgh}
+P. Diaconis, R. Graham and S.~P. Holmes,
+\href{https://doi.org/10.1214/lnms/1215090070}{Statistical problems
+involving permutations with restricted positions}, in
+\emph{State of the Art in Probability and Statistics},
+IMS Lecture Notes--Monograph Series \textbf{36} (2001), 195--222.
+
+\bibitem{lee}
+Y.-L. Lee, \href{https://doi.org/10.37236/10913}{An extension of the
+Lindstr\"om--Gessel--Viennot theorem}, \emph{Electron. J. Combin.}
+\textbf{29} (2022), no.~2, Paper No.~2.41.
+
+\bibitem{rylko}
+D. Ry{\l}ko, \href{https://oeis.org/A401673}{Entry A401673},
+\emph{The On-Line Encyclopedia of Integer Sequences} (2026).
+\end{thebibliography}
+\end{document}
